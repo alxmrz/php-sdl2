@@ -12,5 +12,10 @@
     "minimum-stability": "dev",
     "require-dev": {
         "phpunit/phpunit": "^9"
+    },
+    "autoload": {
+        "psr-4": {
+            "SDL2\\": "src/"
+        }
     }
 }
