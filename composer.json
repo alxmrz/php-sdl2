@@ -1,0 +1,16 @@
+{
+    "name": "alxmrz/php-sdl2",
+    "description": "PHP binding for SDL2 library",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "alxmrz",
+            "email": "alexandr.moroz97@mail.ru"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require-dev": {
+        "phpunit/phpunit": "^9"
+    }
+}
