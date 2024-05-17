@@ -13,11 +13,11 @@ if ($sdl->init(SDL::INIT_EVERYTHING) !== 0) {
 }
 
 $window = $sdl->createWindow(
-    "Tetris with SDL2!",
+    "PHP FFI and SDL2",
     100,
     100,
-    800,
-    600,
+    400,
+    400,
     4);
 
 $renderer = $window->createRenderer(-1, 2);
