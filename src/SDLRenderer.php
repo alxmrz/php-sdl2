@@ -28,9 +28,19 @@ class SDLRenderer
 
     public function fillRect(SDLRect $mainRect): int
     {
-        $mainRectPtr = FFI::addr($mainRect->getSdlRect());
+        $sdlRect = $this->ffi->new('SDL_Rect');
+        $sdlRect->x = $mainRect->getX();
+        $sdlRect->y = $mainRect->getY();
+        $sdlRect->w = $mainRect->getWidth();
+        $sdlRect->h = $mainRect->getHeight();
 
-        return $this->ffi->SDL_RenderFillRect($this->sdlRenderer, $mainRectPtr);
+        $sdlRectPtr = FFI::addr($sdlRect);
+
+        $result = $this->ffi->SDL_RenderFillRect($this->sdlRenderer, $sdlRectPtr);
+
+        FFI::free($sdlRectPtr);
+
+        return $result;
     }
 
     public function getSdlRenderer(): CData

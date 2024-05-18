@@ -65,18 +65,6 @@ class SDL
         return new SDLWindow($window, $this->ffi);
     }
 
-    public function createRect(int $x = 0, int $y = 0, int $width = 0, int $height = 0): SDLRect
-    {
-        $rect = new SDLRect($this->ffi->new('SDL_Rect'));
-
-        $rect->setX($x);
-        $rect->setY($y);
-        $rect->setWidth($width);
-        $rect->setHeight($height);
-
-        return $rect;
-    }
-
     public function destroyWindow(SDLWindow $window): void
     {
         $this->ffi->SDL_DestroyWindow($window->getSdlWindow());

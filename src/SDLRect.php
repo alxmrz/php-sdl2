@@ -2,8 +2,6 @@
 
 namespace SDL2;
 
-use FFI\CData;
-
 class SDLRect
 {
     private int $x;
@@ -11,22 +9,18 @@ class SDLRect
     private int $width;
     private int $height;
 
-    private CData $sdlRect;
-
     /**
-     * @param CData $sdlRect
+     * @param int $x
+     * @param int $y
+     * @param int $width
+     * @param int $height
      */
-    public function __construct(CData $sdlRect)
+    public function __construct(int $x, int $y, int $width, int $height)
     {
-        $this->sdlRect = $sdlRect;
-    }
-
-    /**
-     * @return CData
-     */
-    public function getSdlRect(): CData
-    {
-        return $this->sdlRect;
+        $this->x = $x;
+        $this->y = $y;
+        $this->width = $width;
+        $this->height = $height;
     }
 
     /**
@@ -42,7 +36,6 @@ class SDLRect
      */
     public function setWidth(int $width): void
     {
-        $this->sdlRect->w = $width;
         $this->width = $width;
     }
 
@@ -59,7 +52,6 @@ class SDLRect
      */
     public function setHeight(int $height): void
     {
-        $this->sdlRect->h = $height;
         $this->height = $height;
     }
 
@@ -76,7 +68,6 @@ class SDLRect
      */
     public function setY(int $y): void
     {
-        $this->sdlRect->y = $y;
         $this->y = $y;
     }
 
@@ -93,7 +84,6 @@ class SDLRect
      */
     public function setX(int $x): void
     {
-        $this->sdlRect->x = $x;
         $this->x = $x;
     }
 
