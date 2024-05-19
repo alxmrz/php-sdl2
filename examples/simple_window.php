@@ -31,7 +31,17 @@ if ($renderer === NULL) {
     exit();
 }
 
-$window->updateSurface();
+if ($renderer->clear() < 0) {
+    printf("Cant clear renderer: %s\n", $sdl->getError());
+
+    $window->destroyRenderer($renderer);
+    $sdl->destroyWindow($window);
+
+    $sdl->quit();
+
+    exit();
+}
+
 $renderer->setDrawColor(160, 160, 160, 0);
 
 $mainRect = new SDLRect(0, 0, 800, 600);

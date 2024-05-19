@@ -7,10 +7,10 @@ use FFI\CData;
 
 class SDLWindow
 {
-    private CData $sdlWindow;
+    private $sdlWindow;
     private FFI $ffi;
 
-    public function __construct(CData $sdlWindow, FFI $ffi)
+    public function __construct($sdlWindow, FFI $ffi)
     {
         $this->sdlWindow = $sdlWindow;
         $this->ffi = $ffi;
@@ -36,7 +36,7 @@ class SDLWindow
         $this->ffi->SDL_DestroyRenderer($renderer->getSdlRenderer());
     }
 
-    public function getSdlWindow(): CData
+    public function getSdlWindow()
     {
         return $this->sdlWindow;
     }

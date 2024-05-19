@@ -2,8 +2,8 @@
 
 namespace SDL2;
 
+use Exception;
 use FFI;
-use PHPUnit\Util\Exception;
 
 class SDL
 {
@@ -34,6 +34,7 @@ class SDL
      *
      * @param string $libSOPath specify path to library SDL2 if it saved in not standard directory
      * @return static
+     * @throws Exception
      */
     public static function load(string $libSOPath = ''): static
     {
@@ -52,7 +53,7 @@ class SDL
 
     public function getError(): string
     {
-        return $this->ffi->SDL_GetError();
+        return (string)$this->ffi->SDL_GetError();
     }
 
     public function createWindow(string $title, int $x, int $y, int $width, int $height, int $flags): ?SDLWindow
@@ -79,5 +80,25 @@ class SDL
     public function delay(int $ms): void
     {
         $this->ffi->SDL_Delay($ms);
+    }
+
+    public function createTextureFromSurface(SDLRenderer $renderer, $surfaceMessage)
+    {
+        $texture = $this->ffi->SDL_CreateTextureFromSurface($renderer->getSdlRenderer(), $surfaceMessage);
+        if (!$texture || FFI::isNull($texture)) {
+            return null;
+        }
+
+        return $texture;
+    }
+
+    public function freeSurface($surfaceMessage): void
+    {
+        $this->ffi->SDL_FreeSurface($surfaceMessage);
+    }
+
+    public function destroyTexture($texture): void
+    {
+        $this->ffi->SDL_DestroyTexture($texture);
     }
 }

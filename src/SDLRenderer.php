@@ -3,19 +3,18 @@
 namespace SDL2;
 
 use FFI;
-use FFI\CData;
 use FFI\CType;
 
 class SDLRenderer
 {
-    private CData $sdlRenderer;
+    private $sdlRenderer;
     private FFI $ffi;
 
     /**
-     * @param CData $renderer
+     * @param $renderer
      * @param FFI $ffi
      */
-    public function __construct(CData $renderer, FFI $ffi)
+    public function __construct($renderer, FFI $ffi)
     {
         $this->sdlRenderer = $renderer;
         $this->ffi = $ffi;
@@ -43,7 +42,7 @@ class SDLRenderer
         return $result;
     }
 
-    public function getSdlRenderer(): CData
+    public function getSdlRenderer()
     {
         return $this->sdlRenderer;
     }
@@ -51,5 +50,48 @@ class SDLRenderer
     public function present(): void
     {
         $this->ffi->SDL_RenderPresent($this->getSdlRenderer());
+    }
+
+    public function copy($texture, ?SDLRect $source = null, ?SDLRect $destination = null): int
+    {
+        $sourceRect = null;
+        $destinationRect = null;
+        $destinationRectPtr = null;
+
+        if ($source !== null) {
+            $sourceRect = $this->ffi->new('SDL_Rect');
+            $sourceRect->x = $source->getX();
+            $sourceRect->y = $source->getY();
+            $sourceRect->w = $source->getWidth();
+            $sourceRect->h = $source->getHeight();
+        }
+
+        if ($destination !== null) {
+            $destinationRect = $this->ffi->new('SDL_Rect');
+            $destinationRect->x = $destination->getX();
+            $destinationRect->y = $destination->getY();
+            $destinationRect->w = $destination->getWidth();
+            $destinationRect->h = $destination->getHeight();
+
+            $destinationRectPtr = FFI::addr($destinationRect);
+        }
+
+        $result = $this->ffi->SDL_RenderCopy(
+            $this->getSdlRenderer(),
+            $texture,
+            $sourceRect,
+            $destinationRectPtr
+        );
+
+        if ($destinationRectPtr) {
+            FFI::free($destinationRectPtr);
+        }
+
+        return $result;
+    }
+
+    public function clear(): int
+    {
+        return $this->ffi->SDL_RenderClear($this->getSdlRenderer());
     }
 }
