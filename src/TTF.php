@@ -34,14 +34,14 @@ class TTF
         return new static(FFI::cdef($headers, $libSOPath ?: self::LIB_SDL_TTF_2_SO));
     }
 
-    public function openFont(string $pathToFont, int $ptSize): ?TTFFont
+    public function openFont(string $pathToFont, int $ptSize)
     {
         $ttfFont = $this->ffi->TTF_OpenFont($pathToFont, $ptSize);
         if (!$ttfFont || FFI::isNull($ttfFont)) {
             return null;
         }
 
-        return new TTFFont($ttfFont);
+        return $ttfFont;
     }
 
     public function init(): int
@@ -54,16 +54,16 @@ class TTF
         $this->ffi->TTF_Quit();
     }
 
-    public function renderTextSolid(TTFFont $sans, string $message, SDLColor $color)
+    public function renderTextSolid($sans, string $message, SDLColor $color)
     {
-        $sdlColor = $this->ffi->new("struct SDL_Color", false);
+        $sdlColor = $this->ffi->new("struct SDL_Color");
         $sdlColor->r = $color->r;
         $sdlColor->g = $color->g;
         $sdlColor->b = $color->b;
         $sdlColor->a = $color->a;
 
-        $surface = $this->ffi->TTF_RenderText_Solid($sans->getTTFFont(), $message, $sdlColor);
-        FFI::free($sdlColor);
+        $surface = $this->ffi->TTF_RenderText_Solid($sans, $message, $sdlColor);
+
         if (!$surface) {
             return null;
         }
@@ -77,8 +77,8 @@ class TTF
         return $surface;
     }
 
-    public function closeFont(TTFFont $sans): void
+    public function closeFont($sans): void
     {
-        $this->ffi->TTF_CloseFont($sans->getTTFFont());
+        $this->ffi->TTF_CloseFont($sans);
     }
 }
