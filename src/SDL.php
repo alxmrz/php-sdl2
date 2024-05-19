@@ -116,4 +116,9 @@ class SDL
         return $this->ffi->SDL_LoadBMP_RW($this->ffi->SDL_RWFromFile($imagePath, "rb"), 1);
     }
 
+    public function rwFromFile(string $filePath, string $mode)
+    {
+        return $this->ffi->SDL_RWFromFile($filePath, $mode);
+    }
+
 }

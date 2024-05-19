@@ -95,4 +95,4 @@ void SDL_Delay(Uint32 ms);
 int SDL_PollEvent(SDL_Event * event);
 
 void * SDL_LoadBMP_RW(SDL_RWops * src, int freesrc);
-SDL_RWops * SDL_RWFromFile(const char *file, const char *mode);
+void * SDL_RWFromFile(const char *file, const char *mode);
