@@ -2,7 +2,7 @@
 
 PHP FFI binding for SDL2 library
 
-[<img src="./resources/simple_window.png" width="300" height="300" />](./resources/simple_window.png)
+[<img src="./resources/logo_displayed.png" width="300" height="300" />](./resources/logo_displayed.png)
 
 Steps to run example:
 1) Check that extension FFI is enabled in your php settings (enabled by default)

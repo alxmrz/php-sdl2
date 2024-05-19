@@ -110,4 +110,10 @@ class SDL
     {
         return $this->ffi->new('SDL_Event');
     }
+// SDL_LoadBMP_RW(SDL_RWFromFile(file, "rb"), 1)
+    public function loadBMP(string $imagePath): ?FFI\CData
+    {
+        return $this->ffi->SDL_LoadBMP_RW($this->ffi->SDL_RWFromFile($imagePath, "rb"), 1);
+    }
+
 }

@@ -10,6 +10,7 @@ typedef struct SDL_Renderer SDL_Renderer;
 
 struct SDL_Texture;
 typedef struct SDL_Texture SDL_Texture;
+typedef struct SDL_RWops SDL_RWops;
 
 typedef struct SDL_Rect
 {
@@ -92,3 +93,6 @@ void SDL_Delay(Uint32 ms);
  int SDL_RenderClear(SDL_Renderer * renderer);
 
 int SDL_PollEvent(SDL_Event * event);
+
+void * SDL_LoadBMP_RW(SDL_RWops * src, int freesrc);
+SDL_RWops * SDL_RWFromFile(const char *file, const char *mode);

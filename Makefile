@@ -6,5 +6,7 @@ dt:
 	php examples/display_text.php
 eh:
 	php examples/handle_events.php
+di:
+	php examples/display_image.php
 test:
 	./vendor/bin/phpunit --colors tests
