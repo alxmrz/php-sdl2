@@ -1,5 +1,7 @@
 typedef uint8_t Uint8;
+typedef uint16_t Uint16;
 typedef uint32_t Uint32;
+typedef int32_t Sint32;
 
 
 typedef struct SDL_Window SDL_Window;
@@ -23,7 +25,38 @@ typedef struct SDL_Color
     Uint8 b;
     Uint8 a;
 } SDL_Color;
+typedef enum SDL_Scancode {
+    SDL_SCANCODE_UNKNOWN = 0,
+} SDL_Scancode;
+typedef Sint32 SDL_Keycode;
 
+typedef struct SDL_Keysym
+{
+    SDL_Scancode scancode;      /**< SDL physical key code - see ::SDL_Scancode for details */
+    SDL_Keycode sym;            /**< SDL virtual key code - see ::SDL_Keycode for details */
+    Uint16 mod;                 /**< current key modifiers */
+    Uint32 unused;
+} SDL_Keysym;
+
+typedef struct SDL_KeyboardEvent
+{
+    Uint32 type;        /**< ::SDL_KEYDOWN or ::SDL_KEYUP */
+    Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
+    Uint32 windowID;    /**< The window with keyboard focus, if any */
+    Uint8 state;        /**< ::SDL_PRESSED or ::SDL_RELEASED */
+    Uint8 repeat;       /**< Non-zero if this is a key repeat */
+    Uint8 padding2;
+    Uint8 padding3;
+    SDL_Keysym keysym;  /**< The key that was pressed or released */
+} SDL_KeyboardEvent;
+
+typedef union SDL_Event {
+        Uint32 type; /**< Event type, shared with all events */
+        SDL_KeyboardEvent key;                  /**< Keyboard event data */
+        Uint8 padding[sizeof(void *) <= 8 ? 56 : sizeof(void *) == 16 ? 64 : 3 * sizeof(void *)];
+} SDL_Event;
+
+/*  FUNCTIONS  */
 int SDL_Init(Uint32 flags);
 const char * SDL_GetError(void);
 SDL_Window * SDL_CreateWindow(const char *title,
@@ -57,3 +90,5 @@ void SDL_Delay(Uint32 ms);
  void SDL_FreeSurface(void * surface);
 
  int SDL_RenderClear(SDL_Renderer * renderer);
+
+int SDL_PollEvent(SDL_Event * event);

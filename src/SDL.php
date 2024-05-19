@@ -18,7 +18,6 @@ class SDL
         0x00008000
     );
 
-
     private const LIB_SDL_2_SO = 'libSDL2.so';
     private const PATH_TO_SDL2_HEADERS = __DIR__ . '/../resources/headers/SDL.h';
     private FFI $ffi;
@@ -100,5 +99,15 @@ class SDL
     public function destroyTexture($texture): void
     {
         $this->ffi->SDL_DestroyTexture($texture);
+    }
+
+    public function pollEvent($windowEvent): int
+    {
+        return $this->ffi->SDL_PollEvent(FFI::addr($windowEvent));
+    }
+
+    public function createWindowEvent(): ?FFI\CData
+    {
+        return $this->ffi->new('SDL_Event');
     }
 }
