@@ -1,10 +1,10 @@
 <?php
 
-use SDL2\SDLImage;
+use SDL2\LibSDL2Image;
 use SDL2\LibSDL2;
 use SDL2\SDLColor;
 use SDL2\SDLRect;
-use SDL2\TTF;
+use SDL2\LibSDL2TTF;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -15,7 +15,7 @@ if ($sdl->SDL_Init(LibSDL2::INIT_EVERYTHING) !== 0) {
     exit();
 }
 
-$imager = SDLImage::load();
+$imager = LibSDL2Image::load();
 
 $window = $sdl->SDL_CreateWindow("PHP FFI and SDL2", 100, 100, 300, 300, 4);
 
@@ -64,7 +64,7 @@ if ($sdl->SDL_RenderFillRect($renderer, $mainRect) < 0) {
 $color = new SDLColor(255, 0, 0, 0);
 
 //SDL_Surface * image = SDL_LoadBMP("image.bmp");
-$image = $imager->loadImage(__DIR__ . "/php_logo.png");
+$image = $imager->IMG_Load(__DIR__ . "/php_logo.png");
 if ($image === null) {
     printf("Can't open image: %s\n", $sdl->SDL_GetError());
     $sdl->SDL_DestroyRenderer($renderer);

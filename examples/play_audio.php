@@ -1,7 +1,7 @@
 <?php
 
 use SDL2\LibSDL2;
-use SDL2\SDLMixer;
+use SDL2\LibSDL2Mixer;
 use SDL2\SDLRect;
 
 require_once __DIR__ . '/../vendor/autoload.php';
@@ -14,7 +14,7 @@ if ($sdl->SDL_Init(LibSDL2::INIT_EVERYTHING) !== 0) {
     exit();
 }
 
-$mixer = SDLMixer::load();
+$mixer = LibSDL2Mixer::load();
 
 $window = $sdl->SDL_CreateWindow(
     "PHP FFI and SDL2",
@@ -64,7 +64,7 @@ if ($sdl->SDL_RenderFillRect($renderer, $mainRect) < 0) {
 
 $sdl->SDL_RenderPresent($renderer);
 
-if ($mixer->openAudio(44100, SDLMixer::DEFAULT_FORMAT, 2, 2048) < 0) {
+if ($mixer->Mix_OpenAudio(44100, LibSDL2Mixer::DEFAULT_FORMAT, 2, 2048) < 0) {
     printf("ERROR ON open audio: " . $sdl->SDL_GetError());
 
     $sdl->SDL_DestroyRenderer($renderer);
@@ -72,13 +72,13 @@ if ($mixer->openAudio(44100, SDLMixer::DEFAULT_FORMAT, 2, 2048) < 0) {
     $sdl->SDL_Quit();
 }
 
-$backMusic = $mixer->loadMus(__DIR__ . '/background.mp3');
-$mixer->playMusic($backMusic, -1);
+$backMusic = $mixer->Mix_LoadMUS(__DIR__ . '/background.mp3');
+$mixer->Mix_PlayMusic($backMusic, -1);
 
 $sdl->SDL_Delay(2000);
 
-$chunk = $mixer->loadWAV(__DIR__ . '/chunk.mp3', $sdl);
-$mixer->playChannel(-1, $chunk, 0);
+$chunk = $mixer->Mix_LoadWAV(__DIR__ . '/chunk.mp3', $sdl);
+$mixer->Mix_PlayChannel(-1, $chunk, 0);
 
 $sdl->SDL_Delay(3000);
 

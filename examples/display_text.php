@@ -3,7 +3,7 @@
 use SDL2\LibSDL2;
 use SDL2\SDLColor;
 use SDL2\SDLRect;
-use SDL2\TTF;
+use SDL2\LibSDL2TTF;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -14,8 +14,8 @@ if ($sdl->SDL_Init(LibSDL2::INIT_EVERYTHING) !== 0) {
     exit();
 }
 
-$ttf = TTF::load();
-if ($ttf->init() !== 0) {
+$ttf = LibSDL2TTF::load();
+if ($ttf->TTF_Init() !== 0) {
     echo "ERROR ON TTF INIT: " . $sdl->SDL_GetError();
 
     exit();
@@ -39,7 +39,7 @@ if ($sdl->SDL_RenderClear($renderer) < 0) {
     $sdl->SDL_DestroyRenderer($renderer);
     $sdl->SDL_DestroyWindow($window);
 
-    $ttf->quit();
+    $ttf->TTF_Quit();
     $sdl->SDL_Quit();
 
     exit();
@@ -51,7 +51,7 @@ if ($sdl->SDL_SetRenderDrawColor($renderer, 160, 160, 160, 0) < 0) {
     $sdl->SDL_DestroyRenderer($renderer);
     $sdl->SDL_DestroyWindow($window);
 
-    $ttf->quit();
+    $ttf->TTF_Quit();
     $sdl->SDL_Quit();
 
     exit();
@@ -68,20 +68,20 @@ if ($sdl->SDL_RenderFillRect($renderer, $mainRect) < 0) {
 }
 
 $color = new SDLColor(255, 0, 0, 0);
-$sans = $ttf->openFont(__DIR__ . '/Sans.ttf', 24);
+$sans = $ttf->TTF_OpenFont(__DIR__ . '/Sans.ttf', 24);
 if ($sans === null) {
     printf("Can't create font: %s\n", $sdl->SDL_GetError());
-    $ttf->quit();
+    $ttf->TTF_Quit();
     $sdl->SDL_Quit();
 
     exit();
 }
 
-$surfaceMessage = $ttf->renderTextSolid($sans, "Hello, World!", $color);
+$surfaceMessage = $ttf->TTF_RenderText_Solid($sans, "Hello, World!", $color);
 if ($surfaceMessage === null) {
     printf("Can't create title surface: %s\n", $sdl->SDL_GetError());
-    $ttf->closeFont($sans);
-    $ttf->quit();
+    $ttf->TTF_CloseFont($sans);
+    $ttf->TTF_Quit();
     $sdl->SDL_Quit();
 
     exit();
@@ -93,8 +93,8 @@ $textureMessage = $sdl->SDL_CreateTextureFromSurface($renderer, $surfaceMessage)
 if (!$textureMessage) {
     printf("Can't create texture: %s\n", $sdl->SDL_GetError());
     $sdl->SDL_FreeSurface($surfaceMessage);
-    $ttf->closeFont($sans);
-    $ttf->quit();
+    $ttf->TTF_CloseFont($sans);
+    $ttf->TTF_Quit();
     $sdl->SDL_Quit();
 
     exit();
@@ -106,8 +106,8 @@ if ($sdl->SDL_RenderCopy($renderer, $textureMessage, null, $messageRect) !== 0) 
     printf("Error on copy: %s\n", $sdl->SDL_GetError());
 
     $sdl->SDL_FreeSurface($surfaceMessage);
-    $ttf->closeFont($sans);
-    $ttf->quit();
+    $ttf->TTF_CloseFont($sans);
+    $ttf->TTF_Quit();
     $sdl->SDL_Quit();
 
     exit();
@@ -117,14 +117,14 @@ if (!empty($sdl->SDL_GetError())) {
     printf("Unhandled error: %s\n", $sdl->SDL_GetError());
 
     $sdl->SDL_FreeSurface($surfaceMessage);
-    $ttf->closeFont($sans);
-    $ttf->quit();
+    $ttf->TTF_CloseFont($sans);
+    $ttf->TTF_Quit();
     $sdl->SDL_Quit();
 
     exit();
 }
 
-$ttf->closeFont($sans);
+$ttf->TTF_CloseFont($sans);
 $sdl->SDL_DestroyTexture($textureMessage);
 $sdl->SDL_FreeSurface($surfaceMessage);
 
@@ -134,5 +134,5 @@ $sdl->SDL_Delay(3000);
 
 $sdl->SDL_DestroyRenderer($renderer);
 $sdl->SDL_DestroyWindow($window);
-$ttf->quit();
+$ttf->TTF_Quit();
 $sdl->SDL_Quit();
