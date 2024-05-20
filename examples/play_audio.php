@@ -24,7 +24,7 @@ $window = $sdl->createWindow(
     400,
     4);
 
-$renderer = $window->createRenderer(-1, 2);
+$renderer = $sdl->createRenderer($window, -1, 2);
 if ($renderer === NULL) {
     echo "ERROR ON INIT: " . $sdl->getError();
 
@@ -34,10 +34,10 @@ if ($renderer === NULL) {
     exit();
 }
 
-if ($renderer->clear() < 0) {
+if ($sdl->clear($renderer) < 0) {
     printf("Cant clear renderer: %s\n", $sdl->getError());
 
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
 
     $sdl->quit();
@@ -45,7 +45,7 @@ if ($renderer->clear() < 0) {
     exit();
 }
 
-$renderer->setDrawColor(160, 160, 160, 0);
+$sdl->setDrawColor($renderer, 160, 160, 160, 0);
 
 $mainRect = new SDLRect(0, 0, 800, 600);
 
@@ -54,19 +54,19 @@ $mainRect->setY(0);
 $mainRect->setWidth(800);
 $mainRect->setHeight(600);
 
-if ($renderer->fillRect($mainRect) < 0) {
+if ($sdl->rendererfillRect($renderer, $mainRect) < 0) {
     echo "ERROR ON INIT: " . $sdl->getError();
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
     $sdl->quit();
 }
 
-$renderer->present();
+$sdl->rendererPresent($renderer, );
 
 if ($mixer->openAudio(44100, SDLMixer::DEFAULT_FORMAT, 2,2048) < 0) {
     printf("ERROR ON open audio: " . $sdl->getError());
 
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
     $sdl->quit();
 }
@@ -81,6 +81,6 @@ $mixer->playChannel(-1, $chunk, 0);
 
 $sdl->delay(3000);
 
-$window->destroyRenderer($renderer);
+$sdl->destroyRenderer($renderer);
 $sdl->destroyWindow($window);
 $sdl->quit();

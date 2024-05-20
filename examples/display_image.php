@@ -19,7 +19,7 @@ $imager = SDLImage::load();
 
 $window = $sdl->createWindow("PHP FFI and SDL2", 100, 100, 300, 300, 4);
 
-$renderer = $window->createRenderer(-1, 2);
+$renderer = $sdl->createRenderer($window, -1, 2);
 if ($renderer === NULL) {
     echo "ERROR ON INIT: " . $sdl->getError();
 
@@ -29,10 +29,10 @@ if ($renderer === NULL) {
     exit();
 }
 
-if ($renderer->clear() < 0) {
+if ($sdl->clear($renderer) < 0) {
     printf("Cant clear renderer: %s\n", $sdl->getError());
 
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
 
     $sdl->quit();
@@ -40,10 +40,10 @@ if ($renderer->clear() < 0) {
     exit();
 }
 
-if ($renderer->setDrawColor(160, 160, 160, 0) < 0) {
+if ($sdl->setDrawColor($renderer, 160, 160, 160, 0) < 0) {
     printf("Cant setDrawColor: %s\n", $sdl->getError());
 
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
 
     $sdl->quit();
@@ -53,9 +53,9 @@ if ($renderer->setDrawColor(160, 160, 160, 0) < 0) {
 
 $mainRect = new SDLRect(0, 0, 300, 300);
 
-if ($renderer->fillRect($mainRect) < 0) {
+if ($sdl->rendererfillRect($renderer, $mainRect) < 0) {
     echo "ERROR ON INIT: " . $sdl->getError();
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
     $sdl->quit();
     exit();
@@ -67,7 +67,7 @@ $color = new SDLColor(255, 0, 0, 0);
 $image = $imager->loadImage(__DIR__ . "/php_logo.png");
 if ($image === null) {
     printf("Can't open image: %s\n", $sdl->getError());
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
     $sdl->quit();
 
@@ -86,7 +86,7 @@ if (!$textureMessage) {
 
 $messageRect = new SDLRect(50, 100, 200, 106);
 
-if ($renderer->copy($textureMessage, null, $messageRect) !== 0) {
+if ($sdl->copy($renderer, $textureMessage, null, $messageRect) !== 0) {
 
     printf("Error on copy: %s\n", $sdl->getError());
 
@@ -108,10 +108,10 @@ if (!empty($sdl->getError())) {
 $sdl->destroyTexture($textureMessage);
 $sdl->freeSurface($image);
 
-$renderer->present();
+$sdl->rendererPresent($renderer, );
 
 $sdl->delay(3000);
 
-$window->destroyRenderer($renderer);
+$sdl->destroyRenderer($renderer);
 $sdl->destroyWindow($window);
 $sdl->quit();

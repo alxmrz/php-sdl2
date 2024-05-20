@@ -23,7 +23,7 @@ if ($ttf->init() !== 0) {
 
 $window = $sdl->createWindow("PHP FFI and SDL2", 100, 100, 800, 600, 4);
 
-$renderer = $window->createRenderer(-1, 2);
+$renderer = $sdl->createRenderer($window, -1, 2);
 if ($renderer === NULL) {
     echo "ERROR ON INIT: " . $sdl->getError();
 
@@ -33,10 +33,10 @@ if ($renderer === NULL) {
     exit();
 }
 
-if ($renderer->clear() < 0) {
+if ($sdl->clear($renderer) < 0) {
     printf("Cant clear renderer: %s\n", $sdl->getError());
 
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
 
     $ttf->quit();
@@ -45,10 +45,10 @@ if ($renderer->clear() < 0) {
     exit();
 }
 
-if ($renderer->setDrawColor(160, 160, 160, 0) < 0) {
+if ($sdl->setDrawColor($renderer, 160, 160, 160, 0) < 0) {
     printf("Cant setDrawColor: %s\n", $sdl->getError());
 
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
 
     $ttf->quit();
@@ -59,9 +59,9 @@ if ($renderer->setDrawColor(160, 160, 160, 0) < 0) {
 
 $mainRect = new SDLRect(0, 0, 800, 600);
 
-if ($renderer->fillRect($mainRect) < 0) {
+if ($sdl->rendererfillRect($renderer, $mainRect) < 0) {
     echo "ERROR ON INIT: " . $sdl->getError();
-    $window->destroyRenderer($renderer);
+    $sdl->destroyRenderer($renderer);
     $sdl->destroyWindow($window);
     $sdl->quit();
     exit();
@@ -102,7 +102,7 @@ if (!$textureMessage) {
 
 $messageRect = new SDLRect(200, 150, 400, 100);
 
-if ($renderer->copy($textureMessage, null, $messageRect) !== 0) {
+if ($sdl->copy($renderer, $textureMessage, null, $messageRect) !== 0) {
 
     printf("Error on copy: %s\n", $sdl->getError());
 
@@ -129,11 +129,11 @@ $ttf->closeFont($sans);
 $sdl->destroyTexture($textureMessage);
 $sdl->freeSurface($surfaceMessage);
 
-$renderer->present();
+$sdl->rendererPresent($renderer, );
 
 $sdl->delay(3000);
 
-$window->destroyRenderer($renderer);
+$sdl->destroyRenderer($renderer);
 $sdl->destroyWindow($window);
 $ttf->quit();
 $sdl->quit();

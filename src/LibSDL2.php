@@ -37,13 +37,34 @@ class LibSDL2 extends Library
             return NULL;
         }
 
-        return new SDLWindow($window, $this->ffi);
+        return new SDLWindow($window);
     }
 
     public function destroyWindow(SDLWindow $window): void
     {
         $this->ffi->SDL_DestroyWindow($window->getSdlWindow());
 
+    }
+
+    public function createRenderer(SDLWindow $window, int $index, int $flags): ?SDLRenderer
+    {
+        $renderer = $this->ffi->SDL_CreateRenderer($window->getSdlWindow(), $index, $flags);
+        if (!$renderer) {
+            return null;
+        }
+
+        return new
+        SDLRenderer($renderer, $this->ffi);
+    }
+
+    public function updateSurface(SDLWindow $window): int
+    {
+        return $this->ffi->SDL_UpdateWindowSurface($window->getSdlWindow());
+    }
+
+    public function destroyRenderer(SDLRenderer $renderer): void
+    {
+        $this->ffi->SDL_DestroyRenderer($renderer->getSdlRenderer());
     }
 
     public function quit(): void
@@ -89,5 +110,77 @@ class LibSDL2 extends Library
     public function rwFromFile(string $filePath, string $mode)
     {
         return $this->ffi->SDL_RWFromFile($filePath, $mode);
+    }
+
+
+    public function setDrawColor(SDLRenderer $renderer, int $r, int $g, int $b, int $a): int
+    {
+        return $this->ffi->SDL_SetRenderDrawColor($renderer->getSdlRenderer(), $r, $g, $b, $a);
+    }
+
+    public function rendererfillRect(SDLRenderer $renderer, SDLRect $mainRect): int
+    {
+        $sdlRect = $this->ffi->new('SDL_Rect');
+        $sdlRect->x = $mainRect->getX();
+        $sdlRect->y = $mainRect->getY();
+        $sdlRect->w = $mainRect->getWidth();
+        $sdlRect->h = $mainRect->getHeight();
+
+        $sdlRectPtr = FFI::addr($sdlRect);
+
+        $result = $this->ffi->SDL_RenderFillRect($renderer->getSdlRenderer(), $sdlRectPtr);
+
+        FFI::free($sdlRectPtr);
+
+        return $result;
+    }
+
+    public function rendererPresent(SDLRenderer $renderer): void
+    {
+        $this->ffi->SDL_RenderPresent($renderer->getSdlRenderer());
+    }
+
+    public function copy(SDLRenderer $renderer, $texture, ?SDLRect $source = null, ?SDLRect $destination = null): int
+    {
+        $sourceRectPtr = null;
+        $destinationRectPtr = null;
+
+        if ($source !== null) {
+            $sourceRect = $this->ffi->new('SDL_Rect');
+            $sourceRect->x = $source->getX();
+            $sourceRect->y = $source->getY();
+            $sourceRect->w = $source->getWidth();
+            $sourceRect->h = $source->getHeight();
+
+            $sourceRectPtr = FFI::addr($sourceRect);
+        }
+
+        if ($destination !== null) {
+            $destinationRect = $this->ffi->new('SDL_Rect');
+            $destinationRect->x = $destination->getX();
+            $destinationRect->y = $destination->getY();
+            $destinationRect->w = $destination->getWidth();
+            $destinationRect->h = $destination->getHeight();
+
+            $destinationRectPtr = FFI::addr($destinationRect);
+        }
+
+        $result = $this->ffi->SDL_RenderCopy(
+            $renderer->getSdlRenderer(),
+            $texture,
+            $sourceRectPtr,
+            $destinationRectPtr
+        );
+
+        if ($destinationRectPtr) {
+            FFI::free($destinationRectPtr);
+        }
+
+        return $result;
+    }
+
+    public function clear(SDLRenderer $renderer): int
+    {
+        return $this->ffi->SDL_RenderClear($renderer->getSdlRenderer());
     }
 }
