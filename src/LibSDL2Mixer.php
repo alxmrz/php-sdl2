@@ -10,7 +10,7 @@ class LibSDL2Mixer extends Library
     public const int DEFAULT_FORMAT = 0x8010;
 
     protected const string LIB_SHARED_BINARY_FILE = 'libSDL2_mixer-2.0.so.0';
-    protected const string PATH_TO_LIBRARY_HEADERS = __DIR__ . '/../resources/headers/SDL_mixer.h';
+    protected const string PATH_TO_LIBRARY_HEADERS = __DIR__ . '/headers/SDL_mixer.h';
 
     public function Mix_OpenAudio(int $frequency, int $format, int $channels, int $chunksize): int
     {

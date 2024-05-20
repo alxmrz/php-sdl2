@@ -72,12 +72,12 @@ if ($mixer->Mix_OpenAudio(44100, LibSDL2Mixer::DEFAULT_FORMAT, 2, 2048) < 0) {
     $sdl->SDL_Quit();
 }
 
-$backMusic = $mixer->Mix_LoadMUS(__DIR__ . '/background.mp3');
+$backMusic = $mixer->Mix_LoadMUS(__DIR__ . '/../resources/background.mp3');
 $mixer->Mix_PlayMusic($backMusic, -1);
 
 $sdl->SDL_Delay(2000);
 
-$chunk = $mixer->Mix_LoadWAV(__DIR__ . '/chunk.mp3', $sdl);
+$chunk = $mixer->Mix_LoadWAV(__DIR__ . '/../resources/chunk.mp3', $sdl);
 $mixer->Mix_PlayChannel(-1, $chunk, 0);
 
 $sdl->SDL_Delay(3000);

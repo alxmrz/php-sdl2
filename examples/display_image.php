@@ -64,7 +64,7 @@ if ($sdl->SDL_RenderFillRect($renderer, $mainRect) < 0) {
 $color = new SDLColor(255, 0, 0, 0);
 
 //SDL_Surface * image = SDL_LoadBMP("image.bmp");
-$image = $imager->IMG_Load(__DIR__ . "/php_logo.png");
+$image = $imager->IMG_Load(__DIR__ . "/../resources/php_logo.png");
 if ($image === null) {
     printf("Can't open image: %s\n", $sdl->SDL_GetError());
     $sdl->SDL_DestroyRenderer($renderer);

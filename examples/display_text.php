@@ -68,7 +68,7 @@ if ($sdl->SDL_RenderFillRect($renderer, $mainRect) < 0) {
 }
 
 $color = new SDLColor(255, 0, 0, 0);
-$sans = $ttf->TTF_OpenFont(__DIR__ . '/Sans.ttf', 24);
+$sans = $ttf->TTF_OpenFont(__DIR__ . '/../resources/Sans.ttf', 24);
 if ($sans === null) {
     printf("Can't create font: %s\n", $sdl->SDL_GetError());
     $ttf->TTF_Quit();
