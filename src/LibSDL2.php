@@ -17,8 +17,8 @@ class LibSDL2 extends Library
         0x00008000
     );
 
-    protected const string LIB_SDL_2_SO = 'libSDL2.so';
-    protected const string PATH_TO_SDL2_HEADERS = __DIR__ . '/../resources/headers/SDL.h';
+    protected const string LIB_SHARED_BINARY_FILE = 'libSDL2.so';
+    protected const string PATH_TO_LIBRARY_HEADERS = __DIR__ . '/../resources/headers/SDL.h';
 
     public function SDL_Init(int $flags): int
     {
