@@ -63,9 +63,7 @@ if ($renderer->fillRect($mainRect) < 0) {
 
 $renderer->present();
 
-$mixDefaultFormat = 0x8010;
-
-if ($mixer->openAudio(44100, $mixDefaultFormat, 2,2048) < 0) {
+if ($mixer->openAudio(44100, SDLMixer::DEFAULT_FORMAT, 2,2048) < 0) {
     printf("ERROR ON open audio: " . $sdl->getError());
 
     $window->destroyRenderer($renderer);
@@ -73,7 +71,7 @@ if ($mixer->openAudio(44100, $mixDefaultFormat, 2,2048) < 0) {
     $sdl->quit();
 }
 
-$backMusic = $mixer->Mix_LoadMUS(__DIR__ . '/background.mp3');
+$backMusic = $mixer->loadMus(__DIR__ . '/background.mp3');
 $mixer->playMusic($backMusic, -1);
 
 $sdl->delay(2000);

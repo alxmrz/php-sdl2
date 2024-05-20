@@ -7,7 +7,7 @@ use FFI;
 
 class SDL
 {
-    public const INIT_EVERYTHING = (
+    public const int INIT_EVERYTHING = (
         0x00000001 |
         0x00000010 |
         0x00000020 |
@@ -18,8 +18,8 @@ class SDL
         0x00008000
     );
 
-    private const LIB_SDL_2_SO = 'libSDL2.so';
-    private const PATH_TO_SDL2_HEADERS = __DIR__ . '/../resources/headers/SDL.h';
+    private const string LIB_SDL_2_SO = 'libSDL2.so';
+    private const string PATH_TO_SDL2_HEADERS = __DIR__ . '/../resources/headers/SDL.h';
     private FFI $ffi;
 
     public function __construct(FFI $ffi)
@@ -110,15 +110,9 @@ class SDL
     {
         return $this->ffi->new('SDL_Event');
     }
-// SDL_LoadBMP_RW(SDL_RWFromFile(file, "rb"), 1)
-    public function loadBMP(string $imagePath): ?FFI\CData
-    {
-        return $this->ffi->SDL_LoadBMP_RW($this->ffi->SDL_RWFromFile($imagePath, "rb"), 1);
-    }
 
     public function rwFromFile(string $filePath, string $mode)
     {
         return $this->ffi->SDL_RWFromFile($filePath, $mode);
     }
-
 }

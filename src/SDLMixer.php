@@ -3,11 +3,14 @@
 namespace SDL2;
 
 use FFI;
+use FFI\CData;
 
 class SDLMixer
 {
-    private const LIB_SDL_2_SO = 'libSDL2_mixer-2.0.so.0';
-    private const PATH_TO_SDL2_HEADERS = __DIR__ . '/../resources/headers/SDL_mixer.h';
+    public const int DEFAULT_FORMAT = 0x8010;
+
+    private const string LIB_SDL_2_SO = 'libSDL2_mixer-2.0.so.0';
+    private const string PATH_TO_SDL2_HEADERS = __DIR__ . '/../resources/headers/SDL_mixer.h';
     private FFI $ffi;
 
     public function __construct(FFI $ffi)
@@ -36,19 +39,23 @@ class SDLMixer
     {
         return $this->ffi->Mix_OpenAudio($frequency, $format, $channels, $chunksize);
     }
-//extern DECLSPEC Mix_Chunk * SDLCALL Mix_LoadWAV_RW(SDL_RWops *src, int freesrc);
-//#define Mix_LoadWAV(file)   Mix_LoadWAV_RW(SDL_RWFromFile(file, "rb"), 1)
-    public function loadWAV_new(string $filePath): ?FFI\CData
-    {
-        return $this->ffi->Mix_LoadWAV($filePath);
-    }
 
-    public function loadWAV(string $filePath, SDL $sdl): ?FFI\CData
+    /**
+     * Mix_LoadWAV is a macros in SDL_Mixer 2.0, since 2.6 it became a function.
+     * We use library 2.0 so we just fake the macros as is.
+     *
+     * For new lib version: $this->ffi->Mix_LoadWAV($filePath)
+     *
+     * @param string $filePath
+     * @param SDL $sdl
+     * @return ?CData
+     */
+    public function loadWAV(string $filePath, SDL $sdl): ?CData
     {
         return $this->ffi->Mix_LoadWAV_RW($sdl->rwFromFile($filePath, "rb"), 1);
     }
 
-    public function Mix_LoadMUS(string $filePath): ?FFI\CData
+    public function loadMus(string $filePath): ?CData
     {
         return $this->ffi->Mix_LoadMUS($filePath);
     }
@@ -56,7 +63,7 @@ class SDLMixer
     /**
      * Play a new music object.
      *
-     * @param $backMusic the new music object to schedule for mixing.
+     * @param CData $backMusic the new music object to schedule for mixing.
      * @param int $loops the number of loops to play the music for (0 means "play once and stop").
      * @return int
      */
@@ -64,7 +71,16 @@ class SDLMixer
     {
         return $this->ffi->Mix_PlayMusic($backMusic, $loops);
     }
-    public function playChannel(int $channel, $chunk, $loops): int
+
+    /**
+     * Mix_PlayChannel is a macros for convenient call of Mix_PlayChannelTimed
+     *
+     * @param int $channel
+     * @param CData $chunk
+     * @param int $loops
+     * @return int
+     */
+    public function playChannel(int $channel, $chunk, int $loops): int
     {
         return $this->ffi->Mix_PlayChannelTimed($channel, $chunk, $loops, -1);
     }
