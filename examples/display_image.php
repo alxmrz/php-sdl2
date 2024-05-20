@@ -9,55 +9,55 @@ use SDL2\TTF;
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $sdl = LibSDL2::load();
-if ($sdl->init(LibSDL2::INIT_EVERYTHING) !== 0) {
-    echo "ERROR ON SDL INIT: " . $sdl->getError();
+if ($sdl->SDL_Init(LibSDL2::INIT_EVERYTHING) !== 0) {
+    echo "ERROR ON SDL INIT: " . $sdl->SDL_GetError();
 
     exit();
 }
 
 $imager = SDLImage::load();
 
-$window = $sdl->createWindow("PHP FFI and SDL2", 100, 100, 300, 300, 4);
+$window = $sdl->SDL_CreateWindow("PHP FFI and SDL2", 100, 100, 300, 300, 4);
 
-$renderer = $sdl->createRenderer($window, -1, 2);
-if ($renderer === NULL) {
-    echo "ERROR ON INIT: " . $sdl->getError();
+$renderer = $sdl->SDL_CreateRenderer($window, -1, 2);
+if ($renderer === null) {
+    echo "ERROR ON INIT: " . $sdl->SDL_GetError();
 
-    $sdl->destroyWindow($window);
-    $sdl->quit();
-
-    exit();
-}
-
-if ($sdl->clear($renderer) < 0) {
-    printf("Cant clear renderer: %s\n", $sdl->getError());
-
-    $sdl->destroyRenderer($renderer);
-    $sdl->destroyWindow($window);
-
-    $sdl->quit();
+    $sdl->SDL_DestroyWindow($window);
+    $sdl->SDL_Quit();
 
     exit();
 }
 
-if ($sdl->setDrawColor($renderer, 160, 160, 160, 0) < 0) {
-    printf("Cant setDrawColor: %s\n", $sdl->getError());
+if ($sdl->SDL_RenderClear($renderer) < 0) {
+    printf("Cant clear renderer: %s\n", $sdl->SDL_GetError());
 
-    $sdl->destroyRenderer($renderer);
-    $sdl->destroyWindow($window);
+    $sdl->SDL_DestroyRenderer($renderer);
+    $sdl->SDL_DestroyWindow($window);
 
-    $sdl->quit();
+    $sdl->SDL_Quit();
+
+    exit();
+}
+
+if ($sdl->SDL_SetRenderDrawColor($renderer, 160, 160, 160, 0) < 0) {
+    printf("Cant setDrawColor: %s\n", $sdl->SDL_GetError());
+
+    $sdl->SDL_DestroyRenderer($renderer);
+    $sdl->SDL_DestroyWindow($window);
+
+    $sdl->SDL_Quit();
 
     exit();
 }
 
 $mainRect = new SDLRect(0, 0, 300, 300);
 
-if ($sdl->rendererfillRect($renderer, $mainRect) < 0) {
-    echo "ERROR ON INIT: " . $sdl->getError();
-    $sdl->destroyRenderer($renderer);
-    $sdl->destroyWindow($window);
-    $sdl->quit();
+if ($sdl->SDL_RenderFillRect($renderer, $mainRect) < 0) {
+    echo "ERROR ON INIT: " . $sdl->SDL_GetError();
+    $sdl->SDL_DestroyRenderer($renderer);
+    $sdl->SDL_DestroyWindow($window);
+    $sdl->SDL_Quit();
     exit();
 }
 
@@ -66,52 +66,51 @@ $color = new SDLColor(255, 0, 0, 0);
 //SDL_Surface * image = SDL_LoadBMP("image.bmp");
 $image = $imager->loadImage(__DIR__ . "/php_logo.png");
 if ($image === null) {
-    printf("Can't open image: %s\n", $sdl->getError());
-    $sdl->destroyRenderer($renderer);
-    $sdl->destroyWindow($window);
-    $sdl->quit();
+    printf("Can't open image: %s\n", $sdl->SDL_GetError());
+    $sdl->SDL_DestroyRenderer($renderer);
+    $sdl->SDL_DestroyWindow($window);
+    $sdl->SDL_Quit();
 
     exit();
 }
 
-$textureMessage = $sdl->createTextureFromSurface($renderer, $image);
+$textureMessage = $sdl->SDL_CreateTextureFromSurface($renderer, $image);
 if (!$textureMessage) {
-    printf("Can't create texture: %s\n", $sdl->getError());
-    $sdl->freeSurface($image);
+    printf("Can't create texture: %s\n", $sdl->SDL_GetError());
+    $sdl->SDL_FreeSurface($image);
 
-    $sdl->quit();
+    $sdl->SDL_Quit();
 
     exit();
 }
 
 $messageRect = new SDLRect(50, 100, 200, 106);
 
-if ($sdl->copy($renderer, $textureMessage, null, $messageRect) !== 0) {
+if ($sdl->SDL_RenderCopy($renderer, $textureMessage, null, $messageRect) !== 0) {
+    printf("Error on copy: %s\n", $sdl->SDL_GetError());
 
-    printf("Error on copy: %s\n", $sdl->getError());
-
-    $sdl->freeSurface($image);
-    $sdl->quit();
-
-    exit();
-}
-
-if (!empty($sdl->getError())) {
-    printf("Unhandled error: %s\n", $sdl->getError());
-
-    $sdl->freeSurface($image);
-    $sdl->quit();
+    $sdl->SDL_FreeSurface($image);
+    $sdl->SDL_Quit();
 
     exit();
 }
 
-$sdl->destroyTexture($textureMessage);
-$sdl->freeSurface($image);
+if (!empty($sdl->SDL_GetError())) {
+    printf("Unhandled error: %s\n", $sdl->SDL_GetError());
 
-$sdl->rendererPresent($renderer, );
+    $sdl->SDL_FreeSurface($image);
+    $sdl->SDL_Quit();
 
-$sdl->delay(3000);
+    exit();
+}
 
-$sdl->destroyRenderer($renderer);
-$sdl->destroyWindow($window);
-$sdl->quit();
+$sdl->SDL_DestroyTexture($textureMessage);
+$sdl->SDL_FreeSurface($image);
+
+$sdl->SDL_RenderPresent($renderer);
+
+$sdl->SDL_Delay(3000);
+
+$sdl->SDL_DestroyRenderer($renderer);
+$sdl->SDL_DestroyWindow($window);
+$sdl->SDL_Quit();

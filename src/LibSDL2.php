@@ -20,64 +20,62 @@ class LibSDL2 extends Library
     protected const string LIB_SDL_2_SO = 'libSDL2.so';
     protected const string PATH_TO_SDL2_HEADERS = __DIR__ . '/../resources/headers/SDL.h';
 
-    public function init(int $flags): int
+    public function SDL_Init(int $flags): int
     {
         return $this->ffi->SDL_Init($flags);
     }
 
-    public function getError(): string
+    public function SDL_GetError(): string
     {
         return (string)$this->ffi->SDL_GetError();
     }
 
-    public function createWindow(string $title, int $x, int $y, int $width, int $height, int $flags): ?SDLWindow
+    public function SDL_CreateWindow(string $title, int $x, int $y, int $width, int $height, int $flags): ?SDLWindow
     {
         $window = $this->ffi->SDL_CreateWindow($title, $x, $y, $width, $height, $flags);
         if (!$window) {
-            return NULL;
+            return null;
         }
 
         return new SDLWindow($window);
     }
 
-    public function destroyWindow(SDLWindow $window): void
+    public function SDL_DestroyWindow(SDLWindow $window): void
     {
         $this->ffi->SDL_DestroyWindow($window->getSdlWindow());
-
     }
 
-    public function createRenderer(SDLWindow $window, int $index, int $flags): ?SDLRenderer
+    public function SDL_CreateRenderer(SDLWindow $window, int $index, int $flags): ?SDLRenderer
     {
         $renderer = $this->ffi->SDL_CreateRenderer($window->getSdlWindow(), $index, $flags);
         if (!$renderer) {
             return null;
         }
 
-        return new
-        SDLRenderer($renderer, $this->ffi);
+        return new SDLRenderer($renderer);
     }
 
-    public function updateSurface(SDLWindow $window): int
+    public function SDL_UpdateWindowSurface(SDLWindow $window): int
     {
         return $this->ffi->SDL_UpdateWindowSurface($window->getSdlWindow());
     }
 
-    public function destroyRenderer(SDLRenderer $renderer): void
+    public function SDL_DestroyRenderer(SDLRenderer $renderer): void
     {
         $this->ffi->SDL_DestroyRenderer($renderer->getSdlRenderer());
     }
 
-    public function quit(): void
+    public function SDL_Quit(): void
     {
         $this->ffi->SDL_Quit();
     }
 
-    public function delay(int $ms): void
+    public function SDL_Delay(int $ms): void
     {
         $this->ffi->SDL_Delay($ms);
     }
 
-    public function createTextureFromSurface(SDLRenderer $renderer, $surfaceMessage)
+    public function SDL_CreateTextureFromSurface(SDLRenderer $renderer, $surfaceMessage)
     {
         $texture = $this->ffi->SDL_CreateTextureFromSurface($renderer->getSdlRenderer(), $surfaceMessage);
         if (!$texture || FFI::isNull($texture)) {
@@ -87,17 +85,17 @@ class LibSDL2 extends Library
         return $texture;
     }
 
-    public function freeSurface($surfaceMessage): void
+    public function SDL_FreeSurface($surfaceMessage): void
     {
         $this->ffi->SDL_FreeSurface($surfaceMessage);
     }
 
-    public function destroyTexture($texture): void
+    public function SDL_DestroyTexture($texture): void
     {
         $this->ffi->SDL_DestroyTexture($texture);
     }
 
-    public function pollEvent($windowEvent): int
+    public function SDL_PollEvent($windowEvent): int
     {
         return $this->ffi->SDL_PollEvent(FFI::addr($windowEvent));
     }
@@ -107,18 +105,18 @@ class LibSDL2 extends Library
         return $this->ffi->new('SDL_Event');
     }
 
-    public function rwFromFile(string $filePath, string $mode)
+    public function SDL_RWFromFile(string $filePath, string $mode)
     {
         return $this->ffi->SDL_RWFromFile($filePath, $mode);
     }
 
 
-    public function setDrawColor(SDLRenderer $renderer, int $r, int $g, int $b, int $a): int
+    public function SDL_SetRenderDrawColor(SDLRenderer $renderer, int $r, int $g, int $b, int $a): int
     {
         return $this->ffi->SDL_SetRenderDrawColor($renderer->getSdlRenderer(), $r, $g, $b, $a);
     }
 
-    public function rendererfillRect(SDLRenderer $renderer, SDLRect $mainRect): int
+    public function SDL_RenderFillRect(SDLRenderer $renderer, SDLRect $mainRect): int
     {
         $sdlRect = $this->ffi->new('SDL_Rect');
         $sdlRect->x = $mainRect->getX();
@@ -135,13 +133,17 @@ class LibSDL2 extends Library
         return $result;
     }
 
-    public function rendererPresent(SDLRenderer $renderer): void
+    public function SDL_RenderPresent(SDLRenderer $renderer): void
     {
         $this->ffi->SDL_RenderPresent($renderer->getSdlRenderer());
     }
 
-    public function copy(SDLRenderer $renderer, $texture, ?SDLRect $source = null, ?SDLRect $destination = null): int
-    {
+    public function SDL_RenderCopy(
+        SDLRenderer $renderer,
+        $texture,
+        ?SDLRect $source = null,
+        ?SDLRect $destination = null
+    ): int {
         $sourceRectPtr = null;
         $destinationRectPtr = null;
 
@@ -179,7 +181,7 @@ class LibSDL2 extends Library
         return $result;
     }
 
-    public function clear(SDLRenderer $renderer): int
+    public function SDL_RenderClear(SDLRenderer $renderer): int
     {
         return $this->ffi->SDL_RenderClear($renderer->getSdlRenderer());
     }

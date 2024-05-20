@@ -52,7 +52,7 @@ class SDLMixer
      */
     public function loadWAV(string $filePath, LibSDL2 $sdl): ?CData
     {
-        return $this->ffi->Mix_LoadWAV_RW($sdl->rwFromFile($filePath, "rb"), 1);
+        return $this->ffi->Mix_LoadWAV_RW($sdl->SDL_RWFromFile($filePath, "rb"), 1);
     }
 
     public function loadMus(string $filePath): ?CData
