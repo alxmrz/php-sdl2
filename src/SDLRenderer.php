@@ -54,8 +54,7 @@ class SDLRenderer
 
     public function copy($texture, ?SDLRect $source = null, ?SDLRect $destination = null): int
     {
-        $sourceRect = null;
-        $destinationRect = null;
+        $sourceRectPtr = null;
         $destinationRectPtr = null;
 
         if ($source !== null) {
@@ -64,6 +63,8 @@ class SDLRenderer
             $sourceRect->y = $source->getY();
             $sourceRect->w = $source->getWidth();
             $sourceRect->h = $source->getHeight();
+
+            $sourceRectPtr = FFI::addr($sourceRect);
         }
 
         if ($destination !== null) {
@@ -79,7 +80,7 @@ class SDLRenderer
         $result = $this->ffi->SDL_RenderCopy(
             $this->getSdlRenderer(),
             $texture,
-            $sourceRect,
+            $sourceRectPtr,
             $destinationRectPtr
         );
 

@@ -47,10 +47,10 @@ class SDLMixer
      * For new lib version: $this->ffi->Mix_LoadWAV($filePath)
      *
      * @param string $filePath
-     * @param SDL $sdl
+     * @param LibSDL2 $sdl
      * @return ?CData
      */
-    public function loadWAV(string $filePath, SDL $sdl): ?CData
+    public function loadWAV(string $filePath, LibSDL2 $sdl): ?CData
     {
         return $this->ffi->Mix_LoadWAV_RW($sdl->rwFromFile($filePath, "rb"), 1);
     }

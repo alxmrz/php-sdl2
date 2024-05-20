@@ -1,14 +1,14 @@
 <?php
 
-use SDL2\SDL;
+use SDL2\LibSDL2;
 use SDL2\SDLColor;
 use SDL2\SDLRect;
 use SDL2\TTF;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-$sdl = SDL::load();
-if ($sdl->init(SDL::INIT_EVERYTHING) !== 0) {
+$sdl = LibSDL2::load();
+if ($sdl->init(LibSDL2::INIT_EVERYTHING) !== 0) {
     echo "ERROR ON SDL INIT: " . $sdl->getError();
 
     exit();

@@ -2,10 +2,9 @@
 
 namespace SDL2;
 
-use Exception;
 use FFI;
 
-class SDL
+class LibSDL2 extends Library
 {
     public const int INIT_EVERYTHING = (
         0x00000001 |
@@ -18,32 +17,8 @@ class SDL
         0x00008000
     );
 
-    private const string LIB_SDL_2_SO = 'libSDL2.so';
-    private const string PATH_TO_SDL2_HEADERS = __DIR__ . '/../resources/headers/SDL.h';
-    private FFI $ffi;
-
-    public function __construct(FFI $ffi)
-    {
-
-        $this->ffi = $ffi;
-    }
-
-    /**
-     * Load library SDL2 via FFI
-     *
-     * @param string $libSOPath specify path to library SDL2 if it saved in not standard directory
-     * @return static
-     * @throws Exception
-     */
-    public static function load(string $libSOPath = ''): static
-    {
-        $headers = file_get_contents(self::PATH_TO_SDL2_HEADERS);
-        if (!$headers) {
-            throw new Exception('Not found SDL headers!');
-        }
-
-        return new static(FFI::cdef($headers, $libSOPath ?: self::LIB_SDL_2_SO));
-    }
+    protected const string LIB_SDL_2_SO = 'libSDL2.so';
+    protected const string PATH_TO_SDL2_HEADERS = __DIR__ . '/../resources/headers/SDL.h';
 
     public function init(int $flags): int
     {
@@ -106,7 +81,7 @@ class SDL
         return $this->ffi->SDL_PollEvent(FFI::addr($windowEvent));
     }
 
-    public function createWindowEvent(): ?FFI\CData
+    public function createWindowEvent()
     {
         return $this->ffi->new('SDL_Event');
     }
