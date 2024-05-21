@@ -11,6 +11,8 @@ abstract class Library
 
     protected FFI $ffi;
 
+    protected static $lib = null;
+
     public function __construct(FFI $ffi)
     {
         $this->ffi = $ffi;
@@ -18,11 +20,15 @@ abstract class Library
 
     public static function load(string $libSOPath = ''): static
     {
-        $headers = file_get_contents(static::PATH_TO_LIBRARY_HEADERS);
-        if (!$headers) {
-            throw new Exception('Not found headers: ' . static::PATH_TO_LIBRARY_HEADERS);
+        if (static::$lib === null) {
+            $headers = file_get_contents(static::PATH_TO_LIBRARY_HEADERS);
+            if (!$headers) {
+                throw new Exception('Not found headers: ' . static::PATH_TO_LIBRARY_HEADERS);
+            }
+
+            static::$lib = new static(FFI::cdef($headers, $libSOPath ?: static::LIB_SHARED_BINARY_FILE));
         }
 
-        return new static(FFI::cdef($headers, $libSOPath ?: static::LIB_SHARED_BINARY_FILE));
+        return static::$lib;
     }
 }
