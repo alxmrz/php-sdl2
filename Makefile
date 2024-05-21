@@ -10,5 +10,7 @@ di:
 	php examples/display_image.php
 pa:
 	php examples/play_audio.php
+hme:
+	php examples/handle_mouse_events.php
 test:
 	./vendor/bin/phpunit --colors tests

@@ -51,9 +51,53 @@ typedef struct SDL_KeyboardEvent
     SDL_Keysym keysym;  /**< The key that was pressed or released */
 } SDL_KeyboardEvent;
 
+
+typedef struct SDL_MouseMotionEvent
+{
+    Uint32 type;        /**< ::SDL_MOUSEMOTION */
+    Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
+    Uint32 windowID;    /**< The window with mouse focus, if any */
+    Uint32 which;       /**< The mouse instance id, or SDL_TOUCH_MOUSEID */
+    Uint32 state;       /**< The current button state */
+    Sint32 x;           /**< X coordinate, relative to window */
+    Sint32 y;           /**< Y coordinate, relative to window */
+    Sint32 xrel;        /**< The relative motion in the X direction */
+    Sint32 yrel;        /**< The relative motion in the Y direction */
+} SDL_MouseMotionEvent;
+
+typedef struct SDL_MouseButtonEvent
+{
+    Uint32 type;        /**< ::SDL_MOUSEBUTTONDOWN or ::SDL_MOUSEBUTTONUP */
+    Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
+    Uint32 windowID;    /**< The window with mouse focus, if any */
+    Uint32 which;       /**< The mouse instance id, or SDL_TOUCH_MOUSEID */
+    Uint8 button;       /**< The mouse button index */
+    Uint8 state;        /**< ::SDL_PRESSED or ::SDL_RELEASED */
+    Uint8 clicks;       /**< 1 for single-click, 2 for double-click, etc. */
+    Uint8 padding1;
+    Sint32 x;           /**< X coordinate, relative to window */
+    Sint32 y;           /**< Y coordinate, relative to window */
+} SDL_MouseButtonEvent;
+
+typedef struct SDL_MouseWheelEvent
+{
+    Uint32 type;        /**< ::SDL_MOUSEWHEEL */
+    Uint32 timestamp;   /**< In milliseconds, populated using SDL_GetTicks() */
+    Uint32 windowID;    /**< The window with mouse focus, if any */
+    Uint32 which;       /**< The mouse instance id, or SDL_TOUCH_MOUSEID */
+    Sint32 x;           /**< The amount scrolled horizontally, positive to the right and negative to the left */
+    Sint32 y;           /**< The amount scrolled vertically, positive away from the user and negative toward the user */
+    Uint32 direction;   /**< Set to one of the SDL_MOUSEWHEEL_* defines. When FLIPPED the values in X and Y will be opposite. Multiply by -1 to change them back */
+    float preciseX;     /**< The amount scrolled horizontally, positive to the right and negative to the left, with float precision (added in 2.0.18) */
+    float preciseY;     /**< The amount scrolled vertically, positive away from the user and negative toward the user, with float precision (added in 2.0.18) */
+} SDL_MouseWheelEvent;
+
 typedef union SDL_Event {
         Uint32 type; /**< Event type, shared with all events */
         SDL_KeyboardEvent key;                  /**< Keyboard event data */
+        SDL_MouseMotionEvent motion;            /**< Mouse motion event data */
+        SDL_MouseButtonEvent button;            /**< Mouse button event data */
+        SDL_MouseWheelEvent wheel;              /**< Mouse wheel event data */
         Uint8 padding[sizeof(void *) <= 8 ? 56 : sizeof(void *) == 16 ? 64 : 3 * sizeof(void *)];
 } SDL_Event;
 
