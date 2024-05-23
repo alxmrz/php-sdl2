@@ -53,7 +53,11 @@ while ($isRunning) {
 
         if (SDLEvent::SDL_MOUSEBUTTONDOWN === $windowEvent->type) {
             if ($windowEvent->button->button === KeyCodes::SDL_BUTTON_LEFT) {
-                printf("Pressed left mouse button\n");
+                printf(
+                    "Pressed left mouse button on: %d, %d\n",
+                    $windowEvent->button->x,
+                    $windowEvent->button->y
+                );
                 continue;
             }
 
@@ -63,7 +67,11 @@ while ($isRunning) {
             }
 
             if ($windowEvent->button->button === KeyCodes::SDL_BUTTON_RIGHT) {
-                printf("Pressed right mouse button\n");
+                printf(
+                    "Pressed right mouse button on: %d, %d\n",
+                    $windowEvent->button->x,
+                    $windowEvent->button->y
+                );
                 continue;
             }
         }

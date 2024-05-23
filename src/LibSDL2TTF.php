@@ -9,6 +9,7 @@ class LibSDL2TTF extends Library
 {
     protected const string LIB_SHARED_BINARY_FILE = 'libSDL2_ttf.so';
     protected const string PATH_TO_LIBRARY_HEADERS = __DIR__ . '/headers/SDL_ttf.h';
+    protected static $lib = null;
 
     public function TTF_OpenFont(string $pathToFont, int $ptSize)
     {
