@@ -24,8 +24,6 @@ Notes:
 
 Public API of the package is unstable and can be changed in any moment.
 
-Warning! Sometimes the package causes a floating segfault in unknown situations.
-
 Tested under Linux only.
 
 Projects that used current package:
