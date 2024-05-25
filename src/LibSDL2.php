@@ -98,11 +98,7 @@ class LibSDL2 extends Library
 
     public function SDL_PollEvent($windowEvent): int
     {
-        $wePtr = FFI::addr($windowEvent);
-        $result = $this->ffi->SDL_PollEvent($wePtr);
-        //FFI::free($wePtr);
-
-        return $result;
+        return $this->ffi->SDL_PollEvent(FFI::addr($windowEvent));
     }
 
     public function createWindowEvent()
