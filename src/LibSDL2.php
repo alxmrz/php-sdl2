@@ -98,7 +98,11 @@ class LibSDL2 extends Library
 
     public function SDL_PollEvent($windowEvent): int
     {
-        return $this->ffi->SDL_PollEvent(FFI::addr($windowEvent));
+        $wePtr = FFI::addr($windowEvent);
+        $result = $this->ffi->SDL_PollEvent($wePtr);
+        //FFI::free($wePtr);
+
+        return $result;
     }
 
     public function createWindowEvent()
@@ -128,8 +132,6 @@ class LibSDL2 extends Library
         $sdlRectPtr = FFI::addr($sdlRect);
 
         $result = $this->ffi->SDL_RenderFillRect($renderer->getSdlRenderer(), $sdlRectPtr);
-
-        FFI::free($sdlRectPtr);
 
         return $result;
     }
@@ -168,18 +170,12 @@ class LibSDL2 extends Library
             $destinationRectPtr = FFI::addr($destinationRect);
         }
 
-        $result = $this->ffi->SDL_RenderCopy(
+        return $this->ffi->SDL_RenderCopy(
             $renderer->getSdlRenderer(),
             $texture,
             $sourceRectPtr,
             $destinationRectPtr
         );
-
-        if ($destinationRectPtr) {
-            FFI::free($destinationRectPtr);
-        }
-
-        return $result;
     }
 
     public function SDL_RenderClear(SDLRenderer $renderer): int
