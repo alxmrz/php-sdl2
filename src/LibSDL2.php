@@ -147,22 +147,12 @@ class LibSDL2 extends Library
         $destinationRectPtr = null;
 
         if ($source !== null) {
-            $sourceRect = $this->ffi->new('SDL_Rect');
-            $sourceRect->x = $source->getX();
-            $sourceRect->y = $source->getY();
-            $sourceRect->w = $source->getWidth();
-            $sourceRect->h = $source->getHeight();
-
+            $sourceRect = $this->createSDLRectFromRect($source);
             $sourceRectPtr = FFI::addr($sourceRect);
         }
 
         if ($destination !== null) {
-            $destinationRect = $this->ffi->new('SDL_Rect');
-            $destinationRect->x = $destination->getX();
-            $destinationRect->y = $destination->getY();
-            $destinationRect->w = $destination->getWidth();
-            $destinationRect->h = $destination->getHeight();
-
+            $destinationRect = $this->createSDLRectFromRect($destination);
             $destinationRectPtr = FFI::addr($destinationRect);
         }
 
@@ -174,8 +164,60 @@ class LibSDL2 extends Library
         );
     }
 
+    public function SDL_RenderCopyEx(
+        SDLRenderer $renderer,
+        $texture,
+        ?SDLRect $source = null,
+        ?SDLRect $destination = null,
+        float $angle = null,
+        SDLPoint $center = null,
+        SDLRendererFlip $flip = null
+    ): int {
+        $sourceRectPtr = null;
+        $destinationRectPtr = null;
+        $sdlCenPointPtr = null;
+
+        if ($source !== null) {
+            $sourceRect = $this->createSDLRectFromRect($source);
+            $sourceRectPtr = FFI::addr($sourceRect);
+        }
+
+        if ($destination !== null) {
+            $destinationRect = $this->createSDLRectFromRect($destination);
+            $destinationRectPtr = FFI::addr($destinationRect);
+        }
+
+        if ($center) {
+            $sdlCenPoint = $this->ffi->new('SDL_Point');
+            $sdlCenPoint->x = $center->x;
+            $sdlCenPoint->y = $center->x;
+            $sdlCenPointPtr = FFI::addr($sdlCenPoint);
+        }
+
+        return $this->ffi->SDL_RenderCopyEx(
+            $renderer->getSdlRenderer(),
+            $texture,
+            $sourceRectPtr,
+            $destinationRectPtr,
+            $angle,
+            $sdlCenPointPtr,
+            $flip->value
+        );
+    }
+
     public function SDL_RenderClear(SDLRenderer $renderer): int
     {
         return $this->ffi->SDL_RenderClear($renderer->getSdlRenderer());
+    }
+
+    private function createSDLRectFromRect(SDLRect $rect): FFI\CData
+    {
+        $result = $this->ffi->new('SDL_Rect');
+        $result->x = $rect->getX();
+        $result->y = $rect->getY();
+        $result->w = $rect->getWidth();
+        $result->h = $rect->getHeight();
+
+        return $result;
     }
 }

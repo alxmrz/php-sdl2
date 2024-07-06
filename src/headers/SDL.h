@@ -12,6 +12,19 @@ struct SDL_Texture;
 typedef struct SDL_Texture SDL_Texture;
 typedef struct SDL_RWops SDL_RWops;
 
+typedef enum SDL_RendererFlip
+{
+    SDL_FLIP_NONE = 0x00000000,     /**< Do not flip */
+    SDL_FLIP_HORIZONTAL = 0x00000001,    /**< flip horizontally */
+    SDL_FLIP_VERTICAL = 0x00000002     /**< flip vertically */
+} SDL_RendererFlip;
+
+typedef struct SDL_Point
+{
+    int x;
+    int y;
+} SDL_Point;
+
 typedef struct SDL_Rect
 {
     int x, y;
@@ -124,11 +137,19 @@ void SDL_DestroyWindow(SDL_Window * window);
 
 void SDL_Delay(Uint32 ms);
 
- SDL_Texture * SDL_CreateTextureFromSurface(SDL_Renderer * renderer, void * surface);
+SDL_Texture * SDL_CreateTextureFromSurface(SDL_Renderer * renderer, void * surface);
 
- void SDL_FreeSurface(void * surface);
+void SDL_FreeSurface(void * surface);
 
- int SDL_RenderCopy(SDL_Renderer * renderer,SDL_Texture * texture, const SDL_Rect * srcrect,const SDL_Rect * dstrect);
+int SDL_RenderCopy(SDL_Renderer * renderer,SDL_Texture * texture, const SDL_Rect * srcrect,const SDL_Rect * dstrect);
+
+int SDL_RenderCopyEx(SDL_Renderer * renderer,
+               SDL_Texture * texture,
+               const SDL_Rect * srcrect,
+               const SDL_Rect * dstrect,
+               const double angle,
+               const SDL_Point *center,
+               const SDL_RendererFlip flip);
 
  void SDL_DestroyTexture(SDL_Texture * texture);
 
