@@ -17,3 +17,4 @@ Mix_Music * Mix_LoadMUS(const char *file);
 int Mix_PlayMusic(Mix_Music *music, int loops);
 
 int Mix_PlayChannelTimed(int channel, Mix_Chunk *chunk, int loops, int ticks);
+int Mix_PlayingMusic(void);

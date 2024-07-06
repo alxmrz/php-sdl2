@@ -62,4 +62,9 @@ class LibSDL2Mixer extends Library
     {
         return $this->ffi->Mix_PlayChannelTimed($channel, $chunk, $loops, -1);
     }
+
+    public function Mix_PlayingMusic(): int
+    {
+        return $this->ffi->Mix_PlayingMusic();
+    }
 }
