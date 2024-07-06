@@ -67,4 +67,9 @@ class LibSDL2Mixer extends Library
     {
         return $this->ffi->Mix_PlayingMusic();
     }
+
+    public function Mix_Playing(int $channel = -1): int
+    {
+        return $this->ffi->Mix_Playing($channel);
+    }
 }
