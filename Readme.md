@@ -27,4 +27,5 @@ Public API of the package is unstable and can be changed in any moment.
 Tested under Linux only.
 
 Projects that used current package:
-- https://github.com/alxmrz/deminer - analog of classic Minesweeper 
+- https://github.com/alxmrz/deminer - a clone of Minesweeper 
+- https://github.com/alxmrz/phpacman - a clone of Pac-man 
