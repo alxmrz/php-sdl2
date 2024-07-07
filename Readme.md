@@ -26,6 +26,5 @@ Public API of the package is unstable and can be changed in any moment.
 
 Tested under Linux only.
 
-Projects that used current package:
-- https://github.com/alxmrz/deminer - a clone of Minesweeper 
-- https://github.com/alxmrz/phpacman - a clone of Pac-man 
+You may be interested:
+- https://github.com/alxmrz/psyx-engine - php 2d game engine made with the php-sdl2 library
