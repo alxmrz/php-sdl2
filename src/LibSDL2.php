@@ -210,6 +210,27 @@ class LibSDL2 extends Library
         return $this->ffi->SDL_RenderClear($renderer->getSdlRenderer());
     }
 
+    public function SDL_RenderDrawPoint(SDLRenderer $renderer, int $x, int $y): int
+    {
+        return $this->ffi->SDL_RenderDrawPoint($renderer->getSdlRenderer(), $x, $y);
+    }
+
+    public function SDL_CreateTexture(SDLRenderer $renderer, int $format, int $access, int $w, int $h): SDLTexture
+    {
+        $sdlTexture =  $this->ffi->SDL_CreateTexture($renderer->getSdlRenderer(), $format, $access, $w, $h);
+
+        return new SDLTexture($sdlTexture);
+    }
+    public function SDL_UpdateTexture(SDLTexture $texture, ?SDLRect $rect, PixelBuffer $pixels, int $pitch): int
+    {
+        return $this->ffi->SDL_UpdateTexture($texture->getSdlTexture(), $rect, $pixels->getValue(), $pitch);
+    }
+
+    public function packColor(int $r, int $g, int $b, int $a = 0): int
+    {
+        return ($a << 24) + ($r << 16) + ($g << 8) + $b;
+    }
+
     private function createSDLRectFromRect(SDLRect $rect): FFI\CData
     {
         $result = $this->ffi->new('SDL_Rect');
@@ -219,5 +240,10 @@ class LibSDL2 extends Library
         $result->h = $rect->getHeight();
 
         return $result;
+    }
+
+    public function fillDataWithValue($cdata, int $value, int $size): void
+    {
+        FFI::memset($cdata, $value, $size);
     }
 }

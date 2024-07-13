@@ -31,4 +31,9 @@ abstract class Library
 
         return static::$lib;
     }
+
+    public function newArray(int $length)
+    {
+        return $this->ffi->new("int [{$length}]");
+    }
 }

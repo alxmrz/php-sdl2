@@ -161,3 +161,8 @@ int SDL_PollEvent(SDL_Event * event);
 
 void * SDL_LoadBMP_RW(SDL_RWops * src, int freesrc);
 void * SDL_RWFromFile(const char *file, const char *mode);
+int SDL_RenderDrawPoint(SDL_Renderer * renderer, int x, int y);
+int SDL_RenderDrawPoints(SDL_Renderer * renderer, const SDL_Point * points, int count);
+
+SDL_Texture * SDL_CreateTexture(SDL_Renderer * renderer, Uint32 format, int access, int w, int h);
+int SDL_UpdateTexture(SDL_Texture * texture, const SDL_Rect * rect, const void *pixels, int pitch);
