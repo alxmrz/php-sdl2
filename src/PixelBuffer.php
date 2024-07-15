@@ -27,4 +27,9 @@ class PixelBuffer
     {
         return $this->pixBuffer;
     }
+
+    public function getLength(): int
+    {
+        return $this->length;
+    }
 }
